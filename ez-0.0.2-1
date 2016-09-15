@@ -1,0 +1,128 @@
+#! /bin/bash
+
+#This script is ment for simplicity. You don't have to worry about missing packages, folders, builds and you can even compile with this script via makepkg and automated option for "sudo pacman -U"
+
+
+#PREPARATION
+if [[ ! -e $HOME/abs ]]; then
+        mkdir $HOME/abs ;
+fi
+
+#INSTALLATION
+action=$1
+shift
+
+case "$action" in
+	# Actions used regularly
+	#Compile info: This scripts edits makepkg, adding a simple line so that pacman will automatically update ( sudo pacman -U package.pkg.tar ) the compiled ".pkg.tar" file.
+	-compile | -c)
+	
+if [[ ! -x /usr/bin/pbget ]]; then
+	yaourt pbget ;
+fi
+
+sudo sed -i '2397 cd $HOME/abs/${pkgname} && sudo pacman -U $pkgname-$fullver-$pkgarch.pkg.tar' /usr/bin/makepkg
+
+	cd /home/$USER/abs && pbget "$@" --aur && cd /home/$USER/abs/"$@" && CONCURRENCY_LEVEL=$(grep -c '^processor' /proc/cpuinfo) && makepkg -sci --skippgpcheck && sudo sed -i '2397 d' /usr/bin/makepkg		
+		;;
+	aur | -aur)
+if [[ ! -x /usr/bin/yaourt ]]; then
+	sudo pacman -S yaourt ;
+fi	
+	yaourt "$@"
+		;;
+	removepackage | -rm)
+	pacman -Rv "$@"
+		;;
+	install | -i)
+	pacman -S "$@"
+		;;
+	removeconfig | -rmcfg)
+	pacman -Rnv "$@"
+		;;
+	destroy | -purge)
+	pacman -Rsncuv "$@"
+		;;
+	-R-c | --cascade)
+	pacman -Rcv "$@"
+		;;
+	-R-u | --unneeded)
+	pacman -Ruv "$@"
+		;;
+	--information | -info)
+        pacman -S -i | grep "$@"
+		;;
+	--find | -f)
+	pacman -S -l | grep "$@"
+		;;
+	*)
+		cat <<-"EOH"
+			NAME
+	
+	ez ( easy ) Simple package wrapper around pacman, yaourt, makepkg, pbget.
+
+
+
+SYNOPSIS
+
+	 ez <operation> [targets]
+
+DESCRIPTION
+
+	"ez" is a script that uses pacman, yaourt, makepkg and pbget to install binary packages, find packages,
+get information about packages, compile packages, create folders for compiling packages, edits makepkg automatically
+so that the user doesn't need to do multiple commands when compiling. It's ment for simplicity and user-friendly.
+
+
+
+Operations
+
+	[-c, -compile package]
+		Creates new folder ~/abs. Finds source with pbget. Compiles source with makepkg.
+		Upgrades binary AUTOMATICALLY with pacman (sudo pacman -U pkgname.pkg.x)
+
+	[-i package] 
+		A simple "pacman -S package"
+
+	[-rm package] 
+		Does "sudo pacman -Rm package"
+		do "pacman -R --help" for more info on remove commands.
+
+	[-aur package] 
+		Gets yaourt with "sudo pacman -S yaourt" ( if pacman.conf is edited and probably is if you got this from aur )
+	[--find , -f]
+		Lists a package in any database it is.
+	[--information | -info]
+		Gives "Name" of the package, "URL" "Depends on ..." "Replaces ..." "Description ..." "Groups ..." "Optional Deps ...) "Conflicts with ... ) ("Replaces ...")
+	
+	[ removeconfig | -rmcfg]
+		Removes files and file configuration
+	[ destroy | -purge ]
+		CAUTION! Remove packages and all packages that depend on them, also removes configuration files plus removes unnecessary dependencies and removes unneeded packages
+	[-R-u | --unneeded]
+		Removes unneeded packages
+	[-R-c | --cascade]
+		Remove packages and all packages that depend on them
+
+
+See also
+
+	man pacman, man makepkg, man yaourt, man pbget
+
+Bugs
+	None.
+
+Authors
+
+	Gheorghe Valentin Rafael <grvconstanta@gmail.com>
+
+
+
+
+ez-0.0.1-1
+
+	
+	
+		EOH
+esac
+
