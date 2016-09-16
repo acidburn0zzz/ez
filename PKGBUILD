@@ -11,7 +11,7 @@ license=('GPL3')
 depends=('pbget' 'diffutils' 'pacman>=5.0' 'package-query>=1.8'
 'gettext')
 makedepends=('')
-source=("https://github.com/Ipssisimus/$pkgname/archive/$pkgname-$pkgver-$pkgre$
+source=("https://github.com/Ipssisimus/$pkgname/archive/$pkgname-$pkgver-$pkgrel.tar.gz$
 
 sudo mv ez /usr/bin/
 md5sums=('c3e04746080cffdd2b75af85aa44344c')
