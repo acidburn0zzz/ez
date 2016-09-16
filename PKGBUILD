@@ -12,7 +12,8 @@ depends=('pbget' 'diffutils' 'pacman>=5.0' 'package-query>=1.8'
 'gettext')
 makedepends=('')
 install=${pkgname}.install
-source=("https://github.com/Ipssisimus/$pkgname/archive/$pkgname-$pkgver-$pkgrel")
-md5sums=('527c8e07c1dc83a66be035d344e79957')
+source=("https://github.com/Ipssisimus/ez/archive/0.0.2-1.tar.gz")
 
-exec ./ez.install
+sudo mv ez /usr/bin/
+md5sums=('c3e04746080cffdd2b75af85aa44344c')
+md5sums=('c3e04746080cffdd2b75af85aa44344c')
