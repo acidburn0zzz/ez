@@ -27,7 +27,7 @@ while True:
   subprocess.call([xtra], shell=True)
 
  elif option == "-c":
-  print("If you are not using ZENOS or other Arch-linux-based-OS with the pbget package already installed, you will need to install pbget from AUR to proceed further")
+  print("You will need to install pbget from AUR to proceed further")
   
   editmakepkg = "sudo sed -i '2397 cd $HOME/abs/${pkgname} && sudo pacman -U $pkgname-$fullver-$pkgarch.pkg.tar' /usr/bin/makepkg"
   subprocess.call([editmakepkg], shell=True)
