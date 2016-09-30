@@ -1,0 +1,45 @@
+#!/usr/bin/python3
+
+import subprocess
+
+while True:
+ print("Enter -i to install")
+ print("Enter -c to compile")
+ print("Enter -r to remove")
+ print("Enter -ie to install packages that -i can't install. -ie Contains all packages that can be installed by -i")
+ print("Type q to quit")
+ option = input("option:  ")
+ 
+ if option == "q":
+  break
+
+ elif option == "-i":
+  ipackage = str(input("Enter package name to install:  "))
+  install = "sudo pacman -S {}".format(ipackage)
+  subprocess.call([install], shell=True)
+ elif option == "-r":
+  rpackage = str(input("Enter package name to remove:  "))
+  remove = "sudo pacman -S {}".format(rpackage)
+  subprocess.call(["sudo", "pacman", "-R", rpackage])
+ elif option == "-ie":
+  iepackage = str(input("Enter package name to install:   "))
+  xtra = "yaourt {} --noconfirm --needed --force".format(iepackage)
+  subprocess.call([xtra], shell=True)
+
+ elif option == "-c":
+  print("You will need to install pbget from AUR to proceed further")
+  
+  editmakepkg = "sudo sed -i '2397 cd $HOME/abs/${pkgname} && sudo pacman -U $pkgname-$fullver-$pkgarch.pkg.tar' /usr/bin/makepkg"
+  subprocess.call([editmakepkg], shell=True)
+
+  cpackage = str(input("Enter package name to compile:  "))
+  abs = "mkdir /home/$USER/abs && cd /home/$USER/abs"
+  subprocess.call([abs], shell=True)
+  actionpbget = "cd /home/$USER/abs && pbget {} --aur".format(cpackage)
+  subprocess.call([actionpbget], shell=True)
+  subprocess.call(["CONCURRENCY_LEVEL=$(grep -c '^processor' /proc/cpuinfo)"], shell=True)
+  actionpkg = "cd /home/$USER/abs/{} && makepkg -sci --skippgpcheck && sudo sed -i '2397 d' /usr/bin/makepkg".format(cpackage)
+  subprocess.call([actionpkg], shell=True)
+
+ else:
+  print("Unkown command, please try again")
