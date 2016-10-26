@@ -1,6 +1,0 @@
-#! /bin/bash
-
-tar -xvf 0.0.2.tar.gz
-cd ez-0.0.2/usr/bin
-sudo mv ez /usr/bin/ez
-sudo chmod +x /usr/bin/ez
